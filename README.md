@@ -8,9 +8,13 @@ This paper shows how a program of matrix products with assembler was implemented
 Nasm, assembly, matrices, product, vector operations, runtime.
 
 # Run example
+In linux:
 
 ```
-~/assemblyPureMatCalculator$ ./scriptCompile 
+git clone https://github.com/sebasgverde/assemblyPureMatCalculator.git
+cd assemblyPureMatCalculator/
+./scriptCompile 
+
 Welcome to the pure assembly matrix calculator
 Please enter only positive integers
 Enter m matrix 1
@@ -59,6 +63,8 @@ Time classic matrix product
 2634 0
 Time mmx matrix product
 11694 0
+
+./scriptClean 
 
 ```
 
