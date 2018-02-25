@@ -43,7 +43,7 @@ Matrix B
 3 3 
 3 3 
 
-Matrix B transpuesta
+Transposed Matrix B
 3 3 3 
 3 3 3 
 

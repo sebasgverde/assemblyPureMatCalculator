@@ -31,7 +31,7 @@ segment .data
 	msgMatB:	db	'Matrix B',0AH
 	finmsgMatB:	equ	$-msgMatB
 
-	msgMatBTrans:	db	'Matrix B transpuesta',0AH
+	msgMatBTrans:	db	'Transposed Matrix B',0AH
 	finmsgMatBTrans:	equ	$-msgMatBTrans
 
 	msgMatC:	db	'Matrix C',0AH
