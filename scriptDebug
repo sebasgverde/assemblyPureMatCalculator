@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm practicaOrg.o
+rm practicaOrg
+rm practicaOrg.lst
+nasm -f elf -l practicaOrg.lst practicaOrg.asm
+ld -m elf_i386 practicaOrg.o -o practicaOrg
+
+gdb practicaOrg 
+
