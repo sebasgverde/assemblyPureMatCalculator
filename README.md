@@ -1,38 +1,38 @@
 # Requierements
 - nasm
 
-# Resumen
-En el presente trabajo se muestra la forma en que se implementó un programa de productos matriciales con assembler usando la sintaxis de NASM	bajo el sistema operativo fedora (Linux), su funcionamiento y todo a lo que se vio enfrentado el programador  para llegar al producto final.
+# Summary
+This paper shows how a program of matrix products with assembler was implemented using NASM syntax under the federative operating system (Linux), its operation and everything the programmer was faced with in order to reach the final product.
  
-# Palabras clave.
-Nasm, assembler, matrices, producto, operaciones vectoriales, tiempo de ejecución.
+# Key words.
+Nasm, assembly, matrices, product, vector operations, runtime.
 
-# 1. Funcionamiento
-El programa inicia con mensaje de bienvenida en el cual se le indica al usuario que solo ingrese enteros positivos, entonces se le piden los órdenes de las matrices para posteriormente leer cada uno de los valores de estas. Una vez se tienen la matriz a y b se hace el producto matricial entre estas en la forma clásica y usando operaciones vectoriales para luego imprimir en pantalla las dos matrices, la transpuesta de b que se usa dentro del producto, la matriz c producto del producto clásico y la d producto de las operaciones vectoriales, finalmente se muestran los tiempos de ejecución de cada una.
-Para ejecutar el programa, en un ambiente Linux, se debe posicionar la consola en la carpeta en que esta el archivo praticaOrg.exe y escribir el comando bash practcaOrg.
+# 1. Functioning
+The program starts with a welcome message in which the user is prompted to enter only positive integers, then prompted for matrix commands and then read each of the matrix values. Once you have the matrix a and b, the matrix product is made between them in the classical form and using vectorial operations to then print on screen the two matrices, the transposition of b that is used within the product, the matrix c product of the classical product and the product of the vector operations, finally the execution times of each one are shown.
+To run the program, in a Linux environment, you must position the console in the folder where the praticaOrg. exe file is located and write the bash practcaOrg command.
 
 # 2. scripts
-Al no usar un ambiente de desarrollo, pronto note lo tedios que era compilar cada vez que se hacía un cambio, primero borrar los archivos, luego crear el object, linkearlo, etc. Para evitar esto se crearon dos scripts para bash que contenían los comandos para borrar dichos archivos y compilar, y otro para lanzar el debug, estos son scriptCompilar y scriptDebug.
+By not using a development environment, you will soon notice how tedious it was to compile every time a change was made, first deleting the files, then creating the object, linke it, etc. To avoid this two bash scripts were created that contained the commands to delete those files and compile, and another to launch the debug, these are scriptCompilar and scriptDebug.
 
 # 3. I/O
-Un gran problema al haber decidido hacer la practica completamente en assembler fue el manejo de entrada y salida, por lo regular esto se hace usando funciones de c pero pero en mi caso tuve que averiguar cómo hacerlo todo desde el código. [1]
+A big problem to have decided to do the practice completely in assembler was the input and output management, usually this is done using c functions but in my case I had to figure out how to do it all from the code. [1]
 
-Gaste horas tratando de saber por qué esta instrucción me sacaba error
-sysExit equ 1, resulto que al aprecer es una palabra reservada, y debe llamarse sys_Exit o algo así, de manera que se diferencie.
+I spent hours trying to figure out why this instruction got me wrong.
+sysExit equ 1, it turns out that appreciating is a reserved word, and it should be called sys_Exit or something like that, so that it differs.
 
-Hice una función llamada displayInt, que reconvertía el entero a char y lo imprimía, pero como al hacer esto se me modificaba el valor para uso posterior tuve que usar variables locales.
+I did a function called displayInt, which reconverted the integer to char and printed it, but since doing this changed the value for later use I had to use local variables.
 
-Cuando implemente el algoritmo para parsear ASCII a int use los registros de 32 bits para todos, esto fue un gran problema, pues cada ASCII es solo un byte, se tuvo que analizar cuando se trataba de referencias y cuando de bytes individuales para usar el registro del tamaño correspondiente.
+When implementing the algorithm for parsing ASCII to int use the 32-bit registers for everyone, this was a big problem, as each ASCII is only one byte, it had to be analyzed when it came to references and individual bytes to use the corresponding size register.
 
-Al final se implementaron dos funciones para parsear de ASCII a int y viceversa, estas se especifican en la sección de seudocódigo.
+In the end, two functions were implemented for parsing from ASCII to int and vice versa, these are specified in the pseudo-code section.
 
-# 4. operaciones vectoriales de Intel.
-En la práctica anterior se implementó toda la forma normal del producto de matrices, por lo cual en un principio se pensó en traducir ese código al assembler de nasm, pero luego, considerando que también se debe hacer usando las operaciones vectoriales de Intel, se decidió averiguar bien cómo funcionan, para tener presente si las matrices de deben almacenar en una forma específica que las haga incompatibles con el otro código.
+4. Intel vector operations.
+In the previous practice, the entire normal form of the matrix product was implemented, so it was initially thought to translate this code into nasm assembler, but then, considering that it should also be done using Intel's vector operations, it was decided to find out how well they work, to keep in mind whether the matrices should be stored in a specific form that makes them incompatible with the other code.
 
-Al investigar me di cuenta que esto de los procesadores tiene más cosas de lo que pensé, mirando las diferentes familias de operaciones note que siempre decían para que micro arquitectura estaban disponibles, yo ni siquiera sabía que un mismo procesador core i5 podía tener varios modelos, mi procesador es un Intel core i5-2430m y se encontró que su micro arquitectura es sandy bridge [2]
+When researching I realized that this processors has more things than I thought, looking at the different families of operations I noticed that they always said that micro architecture was available, I didn't even know that a same core i5 processor could have several models, my processor is an Intel core i5-2430m and it was found that its micro architecture is sandy bridge[2].
 
 http://en.wikibooks.org/wiki/X86_Assembly/SSE
-También se encontró que las características son las siguientes:
+It was also found that the features are as follows:
 
 
 
@@ -53,9 +53,9 @@ VT-x / Virtualization technology
 Low power features
 Enhanced SpeedStep technology 
 
-Sabiendo entonces que mi procesador soportaba todas estas familias de operaciones me dedique a averiguar que funciones podía usar, después de investigar en varias partes encontré dos pdf que mostraban todas las instrucciones simd del Intel [3 y 4].
+Knowing then that my processor supported all these families of operations, I decided to find out what functions I could use, after investigating in several parts I found two pdf files that showed all the simd instructions of Intel[3 and 4].
 
-Experimente con varias, en un principio quería hallar una instrucción que multiplicara dos vectores y otra que hiciese la sumatoria de un vector, pero la segunda no la encontré:
+I experimented with several, at first I wanted to find an instruction that multiplied two vectors and another that did the summation of a vector, but the second one I did not find:
 
 PMULDQ — Multiply Packed Signed Dword Integers
 PMULHRSW — Packed Multiply High with Round and Scale
@@ -63,16 +63,16 @@ PMULHUW—Multiply Packed Unsigned Integers and Store High Result (16)
 PMULLD — Multiply Packed Signed Dword Integers and Store Low Result 
 PMULUDQ—Multiply Packed Unsigned Doubleword Integers
 
-La que utilice fue la que está en negrilla pues es la más estable con enteros, luego de tener esto, simplemente sume a mano los 4 valores.
+The one you use was the one in bold because it is the most stable with integers, after having this, just add the 4 values by hand.
 
-Sin embargo busque más y encontré una instrucción que hacia el producto punto como tal, el problema en ambas es que para int32 solo pueden hacer de a 4, por lo cual tuvo que idear el algoritmo para hacerlo así (ver seudocódigo), las otras instrucciones usadas fueron:
+However, I looked for more and I found an instruction that toward the product point as such, the problem in both of them is that for int32 they can only do 4, so he had to devise the algorithm to do so (see pseudo code), the other instructions used were:
 
 movups	xmm0,[eax]
 CVTDQ2PS	xmm0,xmm0
 CVTPS2DQ	xmm0,xmm0
 dpps		xmm0, xmm1,imm0
 
-otro problema con dpps fue eso de imm0, en principio creí que era un registro de 8 bits donde quedaría el resultado, pero resulto ser una especie de indicador que le dice a la operación como trabajar:
+Another problem with dpps was that of imm0, at first I thought it was an 8-bit register where the result would be, but it turned out to be a kind of indicator that tells the operation how to work:
 
 Table 4-8. Summary of Imm8 Control Byte 
 Imm8 Description
@@ -95,36 +95,36 @@ Each bit of IntRes2 is expanded to byte/word.
 0-------b This bit currently has no defined effect, should be 0.
 1-------b This bit currently has no defined effect, should be 0.
 
-Por lo cual, para como necesitaba que se hiciese el producto debía ser 11110001 (F1 en hexa y 241 en decimal)
+Therefore, in order to make the product it needed to be 11110001 (F1 in hexa and 241 in decimal)
 
 
-# 5. Reservar memoria
-hay gran incidencia de la reserva de memoria, me estaba cambiando resultados al hacer operaciones, pues definí números como byte, pero la operación me daba más grande, modificando también el siguiente número, por esto opte por definir todo como palabra, pues pienso que esto me ayudara a llevar más control sobre la memoria.
+# 5. Memory reserve
+I was changing results when doing operations, because I defined numbers as byte, but the operation was bigger, modifying also the next number, so I chose to define everything as a word, because I think this would help me to take more control over the memory.
 
-todas las variables en las que vaya a guardar una posición de memoria (por ejemplo copias temporales), deben ser como mínimo palabras dobles, tuve un problema pues las tenía como word, y cuando asignaba una el valor me modificaba la otra, que problemático es en nasm  esto de los tipos de dato, nunca había tenido que analizar tanto la longitud de una variable antes de asignarla.
+all the variables in which I was going to save a memory position (for example temporary copies), must be at least double words, I had a problem because I had them as a word, and when I assigned one the value modified the other, which problematic is problematic in nasm this of the data types, I had never had to analyze so much the length of a variable before assigning it.
 
-a la hora de invocar las funciones se debe diferenciar bien si mando el parámetro por valor o por referencia
+When invoking the functions, it is necessary to differentiate whether the parameter is commanded by value or by reference.
 
-en una parte estaba usando al para sumarle solo a eso, gran error, para irle sumado un índice a direcciones y cosas de ese estilo es mejor usar el registro de 32 completo, pues en algún momento se puede pasar y botar cifras provocando errores.
+in one part I was using it to add only to that, big mistake, to add an index to addresses and things like that is better to use the complete 32 record, because at some point you can pass and throw out numbers causing errors.
 
-se me presento otro problema cuando empecé a unir funciones y a trabajar sobre matrices que yo mismo ingresaba con leerMatriz(), por los tamaños me quedaba guardado también el enter, y me sacaba algunos de los errores más extraños que he visto, debo manejar bien todo estos y asegurarme de que en memoria me queden guardados solo valores numéricos, aquí la calve son las funciones de parsing.
+another problem arose when I started to merge functions and work on matrices that I entered myself with readMatriz (), because of the sizes I also kept the enter, and took out some of the strangest errors that I have seen, I must handle all these well and make sure that in memory only numerical values are saved, here the key are the functions of parsing.
 
-en la función producto matricial (y en otras) iniciaba las variables en la siguiente forma:
+in the matrix product function (and others) started the variables as follows:
 mov	word [ebp-20],0;i=0
 mov	word [ebp-16],0;j=0
 mov	dword [ebp-12],matA
 mov	dword [ebp-8],matBtransp
 mov	word [ebp-4],0
 
-es decir, cuando notaba que que no necesitaba los 32 bits no los modificaba, gran error pues cuando quedaban rezagos en la pila de un uso anterior, todo se dañaba, se debe ser consecuente con con lo que se define al principio.
+i. e., when he noticed that he didn't need the 32 bits he didn't modify them, a big mistake because when there were delays in the pile of a previous use, everything was damaged, it must be consistent with what is defined at the beginning.
 
-en el producto punto normal definí el producto punto como byte cuando lo reiniciaba, esto 
-esto provoco que solo reiniciara una parte, aquí se nota el error recurrente en la práctica, y fue la falta de costumbre de tener que poner tanto cuidado al tamaño en memoria.
+in the normal point product I defined the point product as byte when I restarted it, this is 
+This caused me to restart only a part of it, here the recurring error is noticed in practice, and it was the lack of habit of having to pay so much attention to the size in memory.
 
-## 5.1 operaciones
-Es muy importante poner en cero edx antes de hacer la división, y no olvidar que en edx queda el residuo
+5.1 operations
+It is very important to put in zero edx before making the division, and not to forget that in edx the residue remains.
 
-# 6. Pseudocodigo
+# 6. Pseudocode
 msg bienvenido a practica 2
 msg ingrese m de matriz 1
 msg ingrese n de matriz 1
@@ -163,7 +163,7 @@ parseStringInt(num)
 	fm
 fin parseStringInt
 ```
-se me presento un problema pues en la parte en que empiezo a desapilar para imprimir estaba haciendo pop ecx, esto no sirve pues la interrupcion que imprime recibe es la direccion, no el valor, era mov  ecx,esp y luego se desapilaba.
+I was presented with a problem because in the part where I start to unstack to print I was doing pop ecx, this is useless because the interruption that prints receives the address, not the value, was mov ecx, esp and then unstacked.
 
 ## 6.3 leer
 ```
@@ -258,7 +258,7 @@ fin m
 fin pdtoPto
 ```
 
-## 6.7 producto matricial
+## 6.7 matrix product
 
 ```
 quemadas
@@ -289,23 +289,23 @@ multiplicaion(A,m5,C,m,n,q,ret)
 fin multiplicacion
 ```
 
-para la de operaciones vectoriales es D en vez de c y se invoca pdtoPuntoSse()
+for vector operations is D instead of c and pdtoPuntoSse () is invoked.
 
-## 6.8 Plantillas de invocación.
+## 6.8 Invocation Templates.
 
-### 6.8.1 plantilla parseIntString
+### 6.8.1 parseIntString template
 push ascii
 call parseIntString
 pop eax
 
-### 6.8.2 plantilla parseStringInt
+### 6.8.2 parseStringInt template
 
 	mov	eax,num
 	push	eax
 	call	parseStringInt
 	pop eax
 
-### 6.8.3 Plantilla producto punto (funciona para ambos)
+### 6.8.3 Point product template (works for both)
 	mov	eax,[n]
 	push	eax
 	mov	eax,vecB
@@ -318,19 +318,19 @@ pop eax
 	pop eax
 
 # 7. Debuger
-Ante la falta de un ambiente de desarrollo como visual studio fue necesario aprender a usar el debuger gdb para lo cual fue muy útil este tutorial [5]
+In the absence of a development environment such as visual studio, it was necessary to learn how to use debuger gdb for which this tutorial was very useful[5]
 
-# 8. Tiempos de ejecución
-los tiempos de ejecución se hicieron en base a un ejemplo, sin embargo en  este usaban la pila para guardar los resultados, yo prefería usar variables para tener más control y por tener que almacenar dos mediciones [6 y 7] 
+# 8. Execution times
+runtimes were made based on an example, however in this one they used the stack to save the results, I preferred to use variables to have more control and to have to store two measurements[6 and 7]". 
 
-# 9. Posibles mejoras
-En un futuro se podría dar soporte para punto flotantes, con las operaciones mmx se encontró una forma sencilla de convertir, el problema aquí seria la función de parse de string a float y viceversa, esto supondría un gran problema.
-Aunque el programa solo soporta enteros la validación se limita a un mensaje al inicio que señala que no se deben ingresar punto flotantes, negativos o letras, se podrían hacer todas las validaciones y control de excepciones, para que el programa no se bloquee sino que avise al usuario que entre un dato correcto.
-La decisión de hacer el producto punto de a 4 en las operaciones matriciales en vez de usar los 8 registros xmm obedeció a que se deseaba un algoritmo que no se viese limitado a un tamaño de vector (que en el caso de esta práctica es máximo 10), sin embargo se podrían usar dichos registro para hacerlo de a 16 y no dé a 4, de esta manera crecería enormemente la capacidad de este algoritmo, y en estos casos se empezarían a notar cambios realmente grandes en los tiempos de ejecución.
-Se podría buscar una optimización del código del producto sse pues hay que hacer tal cantidad de validaciones y uso de variable y vectores auxiliares, que para arreglos pequeños es muy ineficiente comparado con la forma clásica, sin embargo pienso que una conclusión del trabajo es que esto de las operaciones vectoriales depende mucho de la forma de la matriz, no en el 100% de los casos es más eficiente.
-Para algunas de las funciones no se contaba con suficiente conocimiento sobre el uso de la pila cuando fueron implementadas, por lo cual se declararon variables locales de esa función al principio, se podría manejar el total de la practica con las variable locales en pila.
+# 9. Possible improvements
+In the future it could be possible to support floating point, with the operations mmx a simple way to convert was found, the problem here would be the function of parse from string to float and vice versa, this would be a big problem.
+Although the program only supports integers, validation is limited to a message at the beginning that indicates that floating points, negatives or letters should not be entered, all validations and exception control could be done, so that the program does not block but warns the user to enter a correct data.
+The decision to make the product point 4 in the matrix operations instead of using the 8 xmm registers resulted from the desire for an algorithm that was not limited to a vector size (which in the case of this practice is a maximum of 10), However, these registers could be used to make it 16 and not give 4, this way the capacity of this algorithm would grow enormously, and in these cases would begin to notice really big changes in the execution times.
+One could look for an optimization of the product code sse since it is necessary to make such a quantity of validations and use of variable and auxiliary vectors, that for small arrangements it is very inefficient compared to the classic form, however I think that a conclusion of the work is that this of the vectorial operations depends a lot on the form of the matrix, not in 100% of the cases it is more efficient.
+For some of the functions there was not enough knowledge about the use of the battery when they were implemented, so local variables of this function were declared at first, the total practice could be handled with the local variables in stack.
 
-# 10. Anexos
+# 10. Attachments
 1. practicaOrg.asm: programa final
 2. practicaOrg: ejecutable desde bash
 3. scriptCompilar: script de bash que facilita la compilación del código del .asm
@@ -339,8 +339,8 @@ Para algunas de las funciones no se contaba con suficiente conocimiento sobre el
 6. nasmFedora: pruebas de código que se hicieron al principio para aprender a manejar el ambiente de desarrollo.
 7. otra versiones y cosas: experimentos con las operaciones vectoriales, aritméticas, funciones de medición, interrupciones y cada una de las versiones de la practica incrementalmente.
 
-# 11. Enlaces útiles
-Lo siguiente es un conjunto de enlaces a los que no se les puede considerar bibliografía pues no fueron usados como documentación pero que ayudaron a entender muchas cosas de la práctica.
+# 11. Useful links
+The following is a set of links that cannot be considered bibliography since they were not used as documentation but that helped to understand many things of the practice.
 
 http://codewiki.wikispaces.com/x86_code_timing.nasm
 
@@ -362,20 +362,20 @@ Dot product for AOS (Array of Structs) data. This takes an immediate operand con
 DPPD xmmreg,xmmrm,imm SSE41 
 DPPS xmmreg,xmmrm,imm SSE41
 
-el tal imm no es donde queda el resultado, es el indicador que dice a la funcion como operar
+This imm is not where the result is, it is the indicator that tells the function how to operate.
 
-### ejemplos
+### example
 http://www.csie.ntu.edu.tw/~cyy/courses/assembly/07fall/lectures/handouts/lec15_simd_4up.pdf
 http://www.csee.umbc.edu/~chang/cs313/nasmdoc/html/nasmdocb.html
 
-### comandos de las funciones
+### functions commands
 http://cs.nyu.edu/courses/fall02/V22.0201-001/nasm_doc_html/nasmdocb.html
 
 http://www.ualberta.ca/AICT/RESEARCH/LinuxClusters/doc/icc91/main_cls/mergedProjects/intref_cls/common/intref_sample_dotprod.htm
 
 http://www.csee.umbc.edu/portal/help/nasm/sample.shtml
 
-# Bibliografia
+# Bibliographie
 [1]http://www.dreamincode.net/forums/topic/286248-nasm-linux-terminal-inputoutput-wint-80h/
 [2] http://www.cpu-world.com/CPUs/Core_i5/Intel-Core%20i5%20Mobile%20i5-2430M.html
 
