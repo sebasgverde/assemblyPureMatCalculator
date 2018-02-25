@@ -7,6 +7,61 @@ This paper shows how a program of matrix products with assembler was implemented
 # Key words.
 Nasm, assembly, matrices, product, vector operations, runtime.
 
+# Run example
+
+```
+~/assemblyPureMatCalculator$ ./scriptCompile 
+Welcome to the pure assembly matrix calculator
+Please enter only positive integers
+Enter m matrix 1
+2
+Enter n matrix 1
+3
+Enter n matrix 2
+2
+
+0 2
+1 2
+2 2
+3 2
+4 2
+5 2
+
+0 3
+1 3
+2 3
+3 3
+4 3
+5 3
+
+Matrix A
+2 2 2 
+2 2 2 
+
+Matrix B
+3 3 
+3 3 
+3 3 
+
+Matrix B transpuesta
+3 3 3 
+3 3 3 
+
+Matrix C
+18 18 
+18 18 
+
+Matrix D
+18 18 
+18 18 
+
+Time classic matrix product
+2634 0
+Time mmx matrix product
+11694 0
+
+```
+
 # 1. Functioning
 The program starts with a welcome message in which the user is prompted to enter only positive integers, then prompted for matrix commands and then read each of the matrix values. Once you have the matrix a and b, the matrix product is made between them in the classical form and using vectorial operations to then print on screen the two matrices, the transposition of b that is used within the product, the matrix c product of the classical product and the product of the vector operations, finally the execution times of each one are shown.
 To run the program, in a Linux environment, you must position the console in the folder where the praticaOrg. exe file is located and write the bash practcaOrg command.
@@ -375,7 +430,7 @@ http://www.ualberta.ca/AICT/RESEARCH/LinuxClusters/doc/icc91/main_cls/mergedProj
 
 http://www.csee.umbc.edu/portal/help/nasm/sample.shtml
 
-# Bibliographie
+# Bibliography
 [1]http://www.dreamincode.net/forums/topic/286248-nasm-linux-terminal-inputoutput-wint-80h/
 [2] http://www.cpu-world.com/CPUs/Core_i5/Intel-Core%20i5%20Mobile%20i5-2430M.html
 

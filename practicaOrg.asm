@@ -10,40 +10,40 @@ stderr		equ     3; id error
 segment .data
 	espacioEnBlaco:	db	20H
 	saltoDeLinea:	db	0AH
-	msgBienv:     	db      'Bienvenido a la practica de organizacion de computadores', 0AH
+	msgBienv:     	db      'Welcome to the pure assembly matrix calculator', 0AH
 	msgBienvF:	equ	$-msgBienv
 
-	msgAviso:     	db      'Por favor ingrese solo enteros positivos', 0AH
+	msgAviso:     	db      'Please enter only positive integers', 0AH
 	msgAvisoF:	equ	$-msgAviso
 
-	msgIngM:	db	'ingrese m matriz 1',0AH
+	msgIngM:	db	'Enter m matrix 1',0AH
 	msgIngMF:	equ	$-msgIngM
 
-	msgIngN:	db	'ingrese n matriz 1',0AH
+	msgIngN:	db	'Enter n matrix 1',0AH
 	msgIngNF:	equ	$-msgIngN
 
-	msgIngQ:	db	'ingrese n matriz 2',0AH
+	msgIngQ:	db	'Enter n matrix 2',0AH
 	msgIngQF:	equ	$-msgIngQ
 
-	msgMatA:	db	'Matriz A',0AH
+	msgMatA:	db	'Matrix A',0AH
 	finmsgMatA:	equ	$-msgMatA
 
-	msgMatB:	db	'Matriz B',0AH
+	msgMatB:	db	'Matrix B',0AH
 	finmsgMatB:	equ	$-msgMatB
 
-	msgMatBTrans:	db	'Matriz B transpuesta',0AH
+	msgMatBTrans:	db	'Matrix B transpuesta',0AH
 	finmsgMatBTrans:	equ	$-msgMatBTrans
 
-	msgMatC:	db	'Matriz C',0AH
+	msgMatC:	db	'Matrix C',0AH
 	finmsgMatC:	equ	$-msgMatC
 
-	msgMatD:	db	'Matriz D',0AH
+	msgMatD:	db	'Matrix D',0AH
 	finmsgMatD:	equ	$-msgMatD
 
-	msgTiempoC:	db	'tiempo producto matricial clasico',0AH
+	msgTiempoC:	db	'Time classic matrix product',0AH
 	finmsgTiempoC:	equ	$-msgTiempoC
 
-	msgTiempoD:	db	'tiempo producto matricial mmx',0AH
+	msgTiempoD:	db	'Time mmx matrix product',0AH
 	finmsgTiempoD:	equ	$-msgTiempoD
 
 	i:		dd	0
@@ -862,7 +862,7 @@ leerMatriz:;#900
 
 		Jae finLeer
 
-		;mov	msgBienv,'ingrese elemento'
+		;mov	msgBienv,'Enter elemento'
 		;mov 	ecx,msgBienv
 
 			mov	eax,[i]
@@ -914,7 +914,7 @@ sub	esp, 80
 		;mov	ebx,[ebx]
 		cmp	ebx,eax
 		jae	finMostrar2
-			;mov	msgBienv,'ingrese elemento'
+			;mov	msgBienv,'Enter elemento'
 			;mov 	ecx,msgBienv
 
 			mov	ecx,[ebp + 16];matriz que quiero imprimir
